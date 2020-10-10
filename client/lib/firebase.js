@@ -1,12 +1,8 @@
 import admin from 'firebase-admin';
-
+import serviceAccount from "./key.json"
 try {
   admin.initializeApp({
-    credential: admin.credential.cert({
-      project_id: process.env.eatwell-f06d9,
-      private_key: process.env.AIzaSyCigAOzXJYOEbrWtZBo6ZkvX0SmJf0S4Jg,
-      client_email: process.env.FIREBASE_CLIENT_EMAIL
-    }),
+    credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://eatwell-f06d9.firebaseio.com"
   });
 } catch (error) {
