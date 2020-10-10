@@ -1,19 +1,26 @@
-import Head from 'next/head'
-import * as ui from '@material-ui/core';
+import { useRouter } from 'next/router';
+import useSWR from 'swr';
 
+const fetcher = async (...args) => {
+  const res = await fetch(...args);
 
-export default function userAuth() {
+  return res.json();
+};
+
+function City() {
+  const router = useRouter();
+  const { name } = router.query;
+  const { data } = useSWR(`/api/auth/${name}`, fetcher);
+
+  if (!data) {
+    return 'Loading...';
+  }
+
   return (
     <div>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-        <h1>
-          User Authentication Page
-        </h1>
-        
+      <p>Population: {data.name}</p>
     </div>
-  )
+  );
 }
+
+export default City;
