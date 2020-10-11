@@ -3,9 +3,9 @@ import ReactDOM from 'react'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import * as ui from '@material-ui/core'
-import * as firebase from "firebase/app";
-firebase.initializeApp();
-require("firebase/auth")
+
+import {_login} from './api/auth/auth.js'
+import { resolveHref } from 'next/dist/next-server/lib/router/router'
 
 export default function Home() {
   return (
@@ -43,6 +43,7 @@ class Grid extends React.Component {
   constructor(props) {
     super(props);
     this.handleLoginClick = this.handleLoginClick.bind(this);
+    this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
     this.state = {login: false};
   }
 
@@ -50,9 +51,14 @@ class Grid extends React.Component {
     this.setState({login: true});
   }
 
+  handleLoginSubmit() {
+    this.setState({login: false});
+  }
+
+
   render() {
     if(this.state.login) {
-      return <Login/>
+      return <Login action={this.handleLoginSubmit}/>
     }
     else {
       return (
@@ -106,14 +112,21 @@ class Login extends React.Component {
     this.setState(j);
   }
   handleSubmit(event) {
-    firebase.auth().signInWithEmailAndPassword(this.state["first"], this.state["last"]).catch(function(error) {
-      console.log(error.message)
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // ...
+    (new Promise(function(res, rej) {
+      var e = _login(this.state);
+      console.log(e);
+      if(e) {
+        res("Login successful");
+      }
+      else {
+        rej(e);
+      }
+    })).then(function(res) {
+      this.props.action();
+    }, function(err) {
+      console.log(err);
     });
-    alert('A name was submitted: ' + this.state["first"] + " " + this.state["last"]);
+    //alert('A name was submitted: ' + this.state["first"] + " " + this.state["last"]);
     event.preventDefault();
   }
 
@@ -121,8 +134,8 @@ class Login extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <ui.Grid container direction="column" justify="center" alignItems="center">
-          <ui.TextField id="standard-basic" label="First Name" onChange={(e) => this.handleChange("first", e)}/>
-          <ui.TextField id="standard-basic" label="Last Name" onChange={(e) => this.handleChange("last", e)}/>
+          <ui.TextField id="standard-basic" label="Username" onChange={(e) => this.handleChange("first", e)}/>
+          <ui.TextField id="standard-basic" label="Password" onChange={(e) => this.handleChange("last", e)}/>
         </ui.Grid>
         <input type="submit" value="Submit"/>
       </form>
