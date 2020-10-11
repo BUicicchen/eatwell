@@ -3,6 +3,9 @@ import ReactDOM from 'react'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import * as ui from '@material-ui/core'
+import * as firebase from "firebase/app";
+firebase.initializeApp();
+require("firebase/auth")
 
 export default function Home() {
   return (
@@ -13,11 +16,11 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <img src="/assets/eatwell.png"/>
+      <img src="/assets/eatwell.png" width="75%"/>
 
-        <h1 className={styles.title}>
+        <h2 className={styles.title}>
           Welcome to EatWell!
-        </h1>
+        </h2>
 
         <Grid/>
       </main>
@@ -56,7 +59,7 @@ class Grid extends React.Component {
         <ui.Grid container direction="row" justify="center" alignItems="center">
             
             <ui.Button variant="outlined" onClick={this.handleLoginClick}>
-              User Auth
+              Login
             </ui.Button>
         
             <ui.Button variant="outlined" href={"home"} m={10}>
@@ -92,22 +95,35 @@ class Grid extends React.Component {
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: ''};
+    this.state = {"first": '', "last": ''};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {    this.setState({value: event.target.value});  }
+  handleChange(type, event) {
+    var j = {};
+    j[type] =  event.target.value;
+    this.setState(j);
+  }
   handleSubmit(event) {
-    alert('A name was submitted: ' + this.state.value);
+    firebase.auth().signInWithEmailAndPassword(this.state["first"], this.state["last"]).catch(function(error) {
+      console.log(error.message)
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // ...
+    });
+    alert('A name was submitted: ' + this.state["first"] + " " + this.state["last"]);
     event.preventDefault();
   }
 
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <ui.TextField id="standard-basic" label="First Name" onChange={this.handleChange}/>
-        <ui.TextField id="standard-basic" label="Last Name" onChange={this.handleChange}/>
+        <ui.Grid container direction="column" justify="center" alignItems="center">
+          <ui.TextField id="standard-basic" label="First Name" onChange={(e) => this.handleChange("first", e)}/>
+          <ui.TextField id="standard-basic" label="Last Name" onChange={(e) => this.handleChange("last", e)}/>
+        </ui.Grid>
         <input type="submit" value="Submit"/>
       </form>
     );
