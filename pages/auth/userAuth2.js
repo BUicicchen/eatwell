@@ -10,6 +10,7 @@ const fetcher = async (...args) => {
 function City() {
   const router = useRouter();
   const { name } = router.query;
+  console.log(name)
   const { data } = useSWR(`/api/auth/${name}`, fetcher);
 
   if (!data) {
