@@ -37,7 +37,7 @@ function useWindowSize() {
   return windowSize;
 }
 
-export default function userAuth() {
+export default function viewRecipe() {
   const { width } = useWindowSize();
 
   return (

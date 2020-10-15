@@ -73,11 +73,11 @@ class Grid extends React.Component {
                 User Profile
               </ui.Button>
             
-              <ui.Button variant="outlined" href={"recipe/recipeList"}>
+              <ui.Button variant="outlined" href={"recipes/recipeList"}>
                 Recipe List
               </ui.Button>
     
-              <ui.Button variant="outlined" href={"recipe/viewRecipe"}>
+              <ui.Button variant="outlined" href={"recipes/viewRecipe"}>
                 View Recipe
               </ui.Button>
     
