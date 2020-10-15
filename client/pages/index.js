@@ -77,7 +77,7 @@ class Grid extends React.Component {
                 Recipe List
               </ui.Button>
     
-              <ui.Button variant="outlined" href={"recipes/viewRecipe"}>
+              <ui.Button variant="outlined" href={"recipes/chicken_fried_rice"}>
                 View Recipe
               </ui.Button>
     
