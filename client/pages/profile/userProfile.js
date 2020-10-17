@@ -1,5 +1,6 @@
 import Head from "next/head";
 import * as ui from "@material-ui/core";
+import Button from '@material-ui/core/Button'
 
 const useStyles = ui.makeStyles((theme) => ({
 	heading: {
@@ -8,7 +9,17 @@ const useStyles = ui.makeStyles((theme) => ({
 	avatar: {
 		height: theme.spacing(13),
 		width: theme.spacing(13),
+		margin: "auto",
 	},
+	btn: {
+		width: "8rem",
+		display: "block",
+		margin: "auto",
+		textAlign: "center",
+		marginTop: "1rem"
+	}
+
+
 }));
 
 export default function userAuth() {
@@ -27,6 +38,19 @@ export default function userAuth() {
 				alt="profile pic"
 				className={classes.avatar}
 			/>
+
+<Button
+  variant="contained"
+  component="label"
+  className={classes.btn}
+>
+  Upload File
+  <input
+    type="file"
+    style={{ display: "none" }}
+  />
+</Button>
+
 		</div>
 	);
 }
